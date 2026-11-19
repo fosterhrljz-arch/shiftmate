@@ -1,0 +1,16 @@
+import {writeFile,mkdir} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+import * as XLSX from '../vendor/xlsx.mjs';
+import {sampleData,monday,addDays} from '../src/core.mjs';
+import {makeWorkbook} from '../src/exporter.mjs';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..','samples');await mkdir(root,{recursive:true});
+const w=monday();
+const records=[['Employee name','Position','Hourly rate','Weekly hour limit','Availability'],['Alex Morgan','Barista',18,32,'Mon-Fri 07:00-18:00'],['Jamie Taylor','Server',17,28,'Mon-Sun 09:00-22:00'],['Sam Lee','Cook',23,40,'Tue-Sun 08:00-22:00']];
+const sheet=XLSX.utils.aoa_to_sheet(records),book=XLSX.utils.book_new();XLSX.utils.book_append_sheet(book,sheet,'Employees');XLSX.utils.book_append_sheet(book,XLSX.utils.aoa_to_sheet([['Employee','Role','Date','Start time','End time','Hourly rate','Availability'],['Alex Morgan','Barista',w,'09:00','15:00',18,'Mon-Fri 07:00-18:00'],['Jamie Taylor','Server',addDays(w,1),'11:00','17:00',17,'Mon-Sun 09:00-22:00']]),'Shifts');
+await writeFile(path.join(root,'employees.csv'),XLSX.utils.sheet_to_csv(sheet));
+await writeFile(path.join(root,'employees-and-shifts.xlsx'),XLSX.write(book,{type:'buffer',bookType:'xlsx',compression:true}));
+await writeFile(path.join(root,'legacy-employees.xls'),XLSX.write(book,{type:'buffer',bookType:'biff8'}));
+await writeFile(path.join(root,'needs-correction.csv'),`Employee,Position,Hourly rate,Weekly hour limit,Availability,Date,Start time,End time\nTaylor Quinn,Barista,18,32,Mon-Fri 07:00-18:00,${w},09:00,08:00\n`);
+await writeFile(path.join(root,'sample-week.xlsx'),XLSX.write(makeWorkbook(sampleData(w),w),{type:'buffer',bookType:'xlsx',compression:true}));
+console.log('Created five sample files in ShiftMate/samples.');

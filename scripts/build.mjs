@@ -1,0 +1,10 @@
+import {build} from 'esbuild';
+import {readFile,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const worker=await build({absWorkingDir:root,entryPoints:['src/scheduler.worker.mjs'],bundle:true,write:false,minify:true,format:'iife',platform:'browser',target:'es2022'});
+const result=await build({absWorkingDir:root,entryPoints:['src/main.jsx'],bundle:true,write:false,minify:true,format:'iife',platform:'browser',target:'es2022',define:{'process.env.NODE_ENV':'"production"',__SCHEDULER__:JSON.stringify(worker.outputFiles[0].text)},legalComments:'inline'});
+const css=await readFile(path.join(root,'src/style.css'),'utf8');const pdf=await readFile(path.join(root,'vendor/jspdf.umd.min.js'),'utf8');
+const html=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'none'; worker-src blob:; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="description" content="ShiftMate: smart employee scheduling, saved on your device."><title>ShiftMate v1.1 — Employee Scheduling</title><style>${css}</style></head><body><div id="root"></div><noscript>Enable JavaScript to use ShiftMate. All employee data stays on this device.</noscript><script>${(pdf+'\n'+result.outputFiles[0].text).replace(/<\/script/gi,'<\\/script')}</script></body></html>`;
+await writeFile(path.join(root,'ShiftMate.html'),html);console.log(`Built ShiftMate/ShiftMate.html (${(Buffer.byteLength(html)/1024/1024).toFixed(2)} MB). Double-click to launch offline.`);

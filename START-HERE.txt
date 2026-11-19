@@ -1,0 +1,33 @@
+SHIFTMATE v1.1 — QUICK START
+
+1. Extract ShiftMate-v1.1.0.zip first, if using the ZIP.
+2. Double-click ShiftMate.html.
+3. Open in Microsoft Edge or Google Chrome if prompted.
+4. Choose Start empty workspace for your own business,
+   or Explore sample data for a separate fictional demo.
+
+SUCCESS: Your business starts empty. Demo mode has a visible banner
+and never replaces the saved business workspace.
+
+No installation, terminal, account or internet connection is needed.
+Double-click GUIDE.html for instructions with real screenshots.
+
+UPGRADING: Back up v1.0 first. Use the same file path and browser,
+then choose Review v1.0 data. Select only your real employees.
+Known sample records are excluded; the original v1.0 data is kept.
+You can also restore a JSON backup. Review replaces v1.1 business data.
+
+Schedule: set requirements in Settings, then use Auto-schedule.
+Employees: add/edit people, multiple roles, rates and availability.
+Time off: approve requests, then find cover or run Auto-schedule again.
+Import data: check table type, header, columns and records before saving.
+Reports: staffing, workload, labor estimates, Excel/PDF export.
+Settings: CNY and other currencies, requirements, backup and restore.
+
+IMPORTANT: Data is saved in this browser/profile, not in the HTML file.
+Keep the file in one place. Download backups regularly. Clearing browser
+storage, moving the file or using private mode can lose access to data.
+Restoring a backup or clearing a workspace replaces/removes saved records.
+The demo and business workspace have separate storage.
+
+See GUIDE.html or README.md for limits, examples and test results.
